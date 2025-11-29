@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/IdeaBox.Api/IdeaBox.Api.csproj" />
+    <Project Path="src/IdeaBox.Application/IdeaBox.Application.csproj" />
+    <Project Path="src/IdeaBox.Domain/IdeaBox.Domain.csproj" />
+    <Project Path="src/IdeaBox.Infrastructure/IdeaBox.Infrastructure.csproj" />
+  </Folder>
+</Solution>

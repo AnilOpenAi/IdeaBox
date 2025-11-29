@@ -1,0 +1,18 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.cache
+*.log
+*.db-shm
+*.db-wal
+
+# SQLite db - ister track et ister etme, şimdilik ignore edelim
+ideabox.db
+
+# Rider / JetBrains
+.idea/
+
+# VS Code ayarlarını istersen ekleyebilirsin (zorunlu değil)
+# .vscode/
