@@ -1,3 +1,4 @@
+using IdeaBox.Application.Common;
 using IdeaBox.Application.Ideas;
 using IdeaBox.Domain.Entities;
 using IdeaBox.Infrastructure.Persistence;
@@ -32,19 +33,77 @@ public class IdeaService : IIdeaService
         return idea.Id;
     }
 
-    public async Task<IReadOnlyList<IdeaDto>> GetIdeasAsync(CancellationToken cancellationToken = default)
+    public async Task<PagedResult<IdeaDto>> GetIdeasAsync(
+        int page,
+        int pageSize,
+        CancellationToken cancellationToken = default)
     {
-        return await _dbContext
+        if (page <= 0) page = 1;
+        if (pageSize <= 0) pageSize = 10;
+
+        var query = _dbContext
             .Ideas
-            .OrderByDescending(i => i.CreatedAt)
+            .AsNoTracking()
+            .OrderByDescending(i => i.CreatedAt);
+
+        var totalCount = await query.CountAsync(cancellationToken);
+
+        var items = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .Select(i => new IdeaDto
             {
                 Id = i.Id,
                 Title = i.Title,
                 Description = i.Description,
                 Status = i.Status,
-                CreatedAt = i.CreatedAt
+                CreatedAt = i.CreatedAt,
+                VoteCount = i.Votes.Count   // Step 3 için property’yi şimdiden ekliyoruz
             })
             .ToListAsync(cancellationToken);
+
+        return new PagedResult<IdeaDto>
+        {
+            Items = items,
+            Page = page,
+            PageSize = pageSize,
+            TotalCount = totalCount
+        };
     }
+
+    public async Task LikeAsync(Guid ideaId, Guid userId, CancellationToken cancellationToken = default)
+{
+    var existing = await _dbContext.IdeaVotes
+        .AnyAsync(v => v.IdeaId == ideaId && v.UserId == userId, cancellationToken);
+
+    if (existing)
+        return;
+
+    var ideaExists = await _dbContext.Ideas
+        .AnyAsync(i => i.Id == ideaId, cancellationToken);
+
+    if (!ideaExists)
+        throw new InvalidOperationException("Idea not found.");
+
+    _dbContext.IdeaVotes.Add(new IdeaVote
+    {
+        IdeaId = ideaId,
+        UserId = userId,
+        CreatedAt = DateTime.UtcNow
+    });
+
+    await _dbContext.SaveChangesAsync(cancellationToken);
+}
+
+public async Task UnlikeAsync(Guid ideaId, Guid userId, CancellationToken cancellationToken = default)
+{
+    var vote = await _dbContext.IdeaVotes
+        .SingleOrDefaultAsync(v => v.IdeaId == ideaId && v.UserId == userId, cancellationToken);
+
+    if (vote == null)
+        return;
+
+    _dbContext.IdeaVotes.Remove(vote);
+    await _dbContext.SaveChangesAsync(cancellationToken);
+}
 }

@@ -3,6 +3,7 @@ using System;
 using IdeaBox.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IdeaBox.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(IdeaBoxDbContext))]
-    partial class IdeaBoxDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251130204223_AddUsersAndVotes")]
+    partial class AddUsersAndVotes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.0");

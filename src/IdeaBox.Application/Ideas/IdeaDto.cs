@@ -9,4 +9,6 @@ public class IdeaDto
     public string Description { get; set; } = default!;
     public IdeaStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
+    public int VoteCount { get; set; }
+
 }

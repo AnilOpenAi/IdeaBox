@@ -11,4 +11,7 @@ public class Idea
     public IdeaStatus Status { get; set; } = IdeaStatus.Open;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public User? Owner { get; set; }
+    public ICollection<IdeaVote> Votes { get; set; } = new List<IdeaVote>();
 }
