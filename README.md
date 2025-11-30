@@ -1,12 +1,11 @@
 # IdeaBox
 
-Küçük ama gerçekçi bir **fikir paylaşım backend’i**.  
-Tek amaç: modern .NET ile temiz bir API tasarlayıp, onboarding / auth / voting / pagination gibi temel konuları pratik etmek.
+A small but realistic **idea sharing backend**, built to practice modern .NET, clean layering, authentication, voting and pagination.
 
 ## 🔧 Tech Stack
 
 - .NET 10 Web API (`IdeaBox.Api`)
-- Katmanlı yapı:
+- Layered architecture:
   - `IdeaBox.Domain`
   - `IdeaBox.Application`
   - `IdeaBox.Infrastructure`
@@ -15,20 +14,20 @@ Tek amaç: modern .NET ile temiz bir API tasarlayıp, onboarding / auth / voting
 - JWT Authentication
 - Serilog logging
 - FluentValidation
-- Like (vote) sistemi + pagination
+- Voting (like) system + pagination
 
-## 🚀 Çalıştırma
+## 🚀 Getting Started
 
 ```bash
-git clone https://github.com/<kullanıcı-adın>/IdeaBox.git
+git clone https://github.com/<your-username>/IdeaBox.git
 cd IdeaBox
 
 dotnet restore
 dotnet build
 
-# database (SQLite) migration
+# apply EF Core migrations to SQLite
 dotnet ef database update -p src/IdeaBox.Infrastructure/IdeaBox.Infrastructure.csproj -s src/IdeaBox.Api/IdeaBox.Api.csproj
 
-# api'yi çalıştır
+# run the API
 cd src/IdeaBox.Api
 dotnet run
