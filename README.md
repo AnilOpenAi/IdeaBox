@@ -25,28 +25,32 @@ cd IdeaBox
 dotnet restore
 dotnet build
 
-# apply EF Core migrations to SQLite
-dotnet ef database update -p src/IdeaBox.Infrastructure/IdeaBox.Infrastructure.csproj -s src/IdeaBox.Api/IdeaBox.Api.csproj
+# apply EF Core migra
 
-# run the API
-cd src/IdeaBox.Api
-dotnet run
+The API will listen on something like:
 
-## 🔐 Authentication Flow
+http://localhost:5145
 
-### 1. Register
+Swagger UI:
 
-`POST /api/auth/register`
+http://localhost:5145/swagger
+
+(Adjust the port according to what Kestrel prints in the console.)
+
+🔐 Authentication Flow
+1. Register
+
+POST /api/auth/register
 
 Request body:
 
-```json
 {
   "email": "test@example.com",
   "password": "Test123!"
 }
 
 Example response:
+
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
@@ -60,7 +64,9 @@ Same request body format, response also returns a JWT token.
 3. Use the token
 
 For protected endpoints, send the token in the Authorization header:
+
 Authorization: Bearer <token>
+
 Works with any HTTP client (Postman, Thunder Client, curl, etc.).
 
 💡 Ideas Endpoints
@@ -69,12 +75,17 @@ Create an idea
 POST /api/ideas
 
 Headers:
+
 Authorization: Bearer <token>
 Content-Type: application/json
+
+Body:
+
 {
   "title": "My first idea",
   "description": "This is a test idea for IdeaBox."
 }
+
 Returns 201 Created with the new idea id.
 
 List ideas (with pagination)
@@ -82,6 +93,7 @@ List ideas (with pagination)
 GET /api/ideas?page=1&pageSize=10
 
 Example response:
+
 {
   "items": [
     {
@@ -101,16 +113,18 @@ Example response:
 
 Like / Unlike an idea
 
-Like:
+Like
 
 POST /api/ideas/{id}/like
 
-Unlike:
+Unlike
 
 POST /api/ideas/{id}/unlike
 
 Headers for both:
+
 Authorization: Bearer <token>
+
 No request body required.
 On success they return 204 No Content.
 The voteCount field in the idea list reflects the current like count.
@@ -126,3 +140,4 @@ Delete ideabox.db
 Run dotnet ef database update again
 
 This recreates the database from the latest migrations.
+
