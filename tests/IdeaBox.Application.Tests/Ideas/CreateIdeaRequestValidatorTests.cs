@@ -24,26 +24,38 @@ public class CreateIdeaRequestValidatorTests
         Assert.True(result.IsValid);
     }
 
-    [Theory]
-    [InlineData("")]
-    [InlineData(" ")]
-    [InlineData(null)]
-    public void Should_be_invalid_when_title_is_missing(string? title)
+   [Theory]
+[InlineData("")]
+[InlineData(" ")]
+public void Should_be_invalid_when_title_is_empty_or_whitespace(string title)
+{
+    var request = new CreateIdeaRequest
     {
-        // arrange
-        var request = new CreateIdeaRequest
-        {
-            Title = title,
-            Description = "Does not matter"
-        };
+        Title = title,
+        Description = "Does not matter"
+    };
 
-        // act
-        var result = _validator.Validate(request);
+    var result = _validator.Validate(request);
 
-        // assert
-        Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.PropertyName == "Title");
-    }
+    Assert.False(result.IsValid);
+    Assert.Contains(result.Errors, e => e.PropertyName == "Title");
+}
+
+[Fact]
+public void Should_be_invalid_when_title_is_null()
+{
+    var request = new CreateIdeaRequest
+    {
+        Title = null!, // bilinçli olarak null veriyoruz
+        Description = "Does not matter"
+    };
+
+    var result = _validator.Validate(request);
+
+    Assert.False(result.IsValid);
+    Assert.Contains(result.Errors, e => e.PropertyName == "Title");
+}
+
 
     [Fact]
     public void Should_be_invalid_when_title_exceeds_max_length()
