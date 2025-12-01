@@ -5,4 +5,7 @@
     <Project Path="src/IdeaBox.Domain/IdeaBox.Domain.csproj" />
     <Project Path="src/IdeaBox.Infrastructure/IdeaBox.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/IdeaBox.Application.Tests/IdeaBox.Application.Tests.csproj" />
+  </Folder>
 </Solution>
